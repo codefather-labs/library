@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style link="https://cdn.jsdelivr.net/npm/bootswatch@4.5.2/dist/cerulean/bootstrap.min.css"></style>
+</head>
+<body>
+{{page_obj}}
+<div class="container">
+    <div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+    </div>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Title</th>
+            <th scope="col">Authors</th>
+            <th scope="col">Status</th>
+            <th scope="col">Rented from</th>
+            <th scope="col">Rented to</th>
+            <th scope="col">Is overdue</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for rent in page_obj %}
+        <tr>
+            <th scope="row">{{rent.id}}</th>
+            <td>{{rent.book.name}}</td>
+            {% for author in rent.book.authors.all %}
+            <td>{{author.name}}</td>
+
+            {% endfor %}
+            <td>{{rent.status}}</td>
+            <td>{{rent.time_from}}</td>
+            <td>{{rent.time_to}}</td>
+            {% if rent.is_overdue %}
+            <td style="background-color: red">{{rent.is_overdue}}</td>
+            {% else %}
+            <td style="background-color: green">{{rent.is_overdue}}</td>
+            {% endif %}
+            {% if rent.is_overdue %}
+        <tr>
+            {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
